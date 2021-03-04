@@ -1,1 +1,26 @@
-<p>main works!</p>
+<div class="main main-container">
+  <header class="main-header">
+    <div class="main-header-item">
+      <span>Search: </span>
+      <input [(ngModel)]="searchString"
+             (ngModelChange)="todoListForDisplay = search(searchString, todoList)"
+      />
+
+    </div>
+    <button class="main-header-item"
+            (click)="showMore()"
+    >
+      Show more
+    </button>
+  </header>
+  <ul class="main-list">
+    <li *ngFor="let item of todoListForDisplay">
+      <button class="star {{ isFavorite(item.id) ? 'star-light' : 'star-grey' }}"
+              (click)="addOrRemoveFavorite(item.id)"
+      >
+        &#9733;
+      </button>
+      <span>{{item.title}}</span>
+    </li>
+  </ul>
+</div>
