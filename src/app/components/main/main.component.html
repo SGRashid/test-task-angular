@@ -15,8 +15,8 @@
   </header>
   <ul class="main-list">
     <li *ngFor="let item of todoListForDisplay">
-      <button class="star {{ isFavorite(item.id) ? 'star-light' : 'star-grey' }}"
-              (click)="addOrRemoveFavorite(item.id)"
+      <button class="star {{ item.isFavorite ? 'star-light' : 'star-grey' }}"
+              (click)="addOrRemoveFavorite(item)"
       >
         &#9733;
       </button>

@@ -9,6 +9,7 @@ interface ITodoItem {
   id: number;
   title: string;
   userId: number;
+  isFavorite?: boolean;
 }
 
 @Component({
@@ -24,7 +25,7 @@ export class MainComponent implements OnInit, OnDestroy {
   public todoList: ITodoItem[];
   public todoListForDisplay: ITodoItem[];
   public searchString: string;
-  public favoritList: number[] = [];
+  public favoriteList: number[] = [];
 
   constructor(private http: HttpClient) {
   }
@@ -40,9 +41,14 @@ export class MainComponent implements OnInit, OnDestroy {
   getTodoList(): void {
     const sub = this.http.get(ulr).subscribe(
       (res: ITodoItem[]) => {
-        this.todoList = res.slice(0, this.maxItemCount);
+        this.favoriteList = localStorage.favoriteList
+          ? JSON.parse(localStorage.favoriteList)
+          : [];
+
+        this.todoList = res
+          .slice(0, this.maxItemCount)
+          .map(el => ({...el, isFavorite: this.favoriteList.includes(el.id)}));
         this.todoListForDisplay = this.todoList;
-        console.log(this.todoList);
         sub.unsubscribe();
       },
       err => alert(err)
@@ -62,15 +68,17 @@ export class MainComponent implements OnInit, OnDestroy {
       : this.todoList;
   }
 
-  addOrRemoveFavorite(id: number): void {
-    if (this.favoritList.includes(id)) {
-      this.favoritList.filter(el => el !== id);
+  addOrRemoveFavorite(item): void {
+    if (item.isFavorite) {
+      item.isFavorite = false;
+      this.favoriteList = this.favoriteList.filter(el => el !== item.id);
+      localStorage.setItem('favoriteList', JSON.stringify(this.favoriteList));
       return;
     }
 
-    this.favoritList.push(id);
+    item.isFavorite = true;
+    this.favoriteList.push(item.id);
+    localStorage.setItem('favoriteList', JSON.stringify(this.favoriteList));
   }
-
-  isFavorite = (id: number): boolean => this.favoritList.includes(id);
 
 }
