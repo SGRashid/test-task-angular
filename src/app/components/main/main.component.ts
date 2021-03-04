@@ -22,6 +22,7 @@ export class MainComponent implements OnInit, OnDestroy {
   private maxItemCount = 10;
   private subscription = new Subscription();
 
+  public showOnlyFavorite = false;
   public todoList: ITodoItem[];
   public todoListForDisplay: ITodoItem[];
   public searchString: string;
@@ -63,6 +64,9 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   search(searchString: string, todoList: ITodoItem[]): ITodoItem[] {
+    if (!searchString) {
+      this.searchString = '';
+    }
     return searchString
       ? todoList.filter(item => item.title.match(searchString))
       : this.todoList;

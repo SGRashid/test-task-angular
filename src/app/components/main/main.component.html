@@ -5,22 +5,31 @@
       <input [(ngModel)]="searchString"
              (ngModelChange)="todoListForDisplay = search(searchString, todoList)"
       />
-
+      <button class="btn"
+              (click)="todoListForDisplay = search('', todoList)"
+      >&#10060;</button>
     </div>
-    <button class="main-header-item"
+    <button class="main-header-item btn"
+            (click)="showOnlyFavorite = !showOnlyFavorite"
+    >
+      {{ showOnlyFavorite? 'Show all' : 'Show only favorite' }}
+    </button>
+    <button class="main-header-item btn"
             (click)="showMore()"
     >
       Show more
     </button>
   </header>
   <ul class="main-list">
-    <li *ngFor="let item of todoListForDisplay">
-      <button class="star {{ item.isFavorite ? 'star-light' : 'star-grey' }}"
-              (click)="addOrRemoveFavorite(item)"
-      >
-        &#9733;
-      </button>
-      <span>{{item.title}}</span>
-    </li>
+    <ng-template ngFor let-item [ngForOf]="todoListForDisplay">
+      <li *ngIf="!showOnlyFavorite || item.isFavorite">
+        <button class="btn star {{ item.isFavorite ? 'star-light' : 'star-grey' }}"
+                (click)="addOrRemoveFavorite(item)"
+        >
+          &#9733;
+        </button>
+        <span>{{item.title}}</span>
+      </li>
+    </ng-template>
   </ul>
 </div>
