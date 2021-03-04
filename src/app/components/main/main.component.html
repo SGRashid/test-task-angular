@@ -3,10 +3,10 @@
     <div class="main-header-item">
       <span>Search: </span>
       <input [(ngModel)]="searchString"
-             (ngModelChange)="todoListForDisplay = search(searchString, todoList)"
+             (ngModelChange)="search()"
       />
       <button class="btn"
-              (click)="todoListForDisplay = search('', todoList)"
+              (click)="searchString = ''; search()"
       >&#10060;</button>
     </div>
     <button class="main-header-item btn"

@@ -49,7 +49,7 @@ export class MainComponent implements OnInit, OnDestroy {
         this.todoList = res
           .slice(0, this.maxItemCount)
           .map(el => ({...el, isFavorite: this.favoriteList.includes(el.id)}));
-        this.todoListForDisplay = this.todoList;
+        this.search();
         sub.unsubscribe();
       },
       err => alert(err)
@@ -63,12 +63,9 @@ export class MainComponent implements OnInit, OnDestroy {
     this.getTodoList();
   }
 
-  search(searchString: string, todoList: ITodoItem[]): ITodoItem[] {
-    if (!searchString) {
-      this.searchString = '';
-    }
-    return searchString
-      ? todoList.filter(item => item.title.match(searchString))
+  search(): void {
+    this.todoListForDisplay = this.searchString
+      ? this.todoList.filter(item => item.title.match(this.searchString))
       : this.todoList;
   }
 
